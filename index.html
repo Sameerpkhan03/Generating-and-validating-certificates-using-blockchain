@@ -11,51 +11,65 @@
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
  
  
-    <title>Register Certificate on Blockchain</title>
+    <title>Certificate on Blockchain</title>
   </head>
   <body class="bg-light">
- 
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">BlockChain</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="/index.html">Home</a>
+          <a class="nav-item nav-link" href="/search.html">Verify</a>
+        </div>
+      </div>
+    </nav>
     <div class="container">
       <div class="py-5 text-center">
-        <h2>Register Certificate on Blockchain</h2>
+        <h2>Generate Certificate on Blockchain</h2>
       </div>
- 
       <div class="row">
         <div class="col-md-8 order-md-2">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span>Detail of your certificate</span>
-          </h4>
+            <span>Details of your certificate</span>
+		  </h4>
           <div class="card d-flex px-5 py-5">
+			<div class="sam" style="border:black; border-width:5px; border-style:dashed;">
             <div class="card-body py-5">
-              <h1 class="card-title text-center mb-5">Certificate of Completion</h1>
+              <h1 class="card-title text-center mb-5"><i>Certificate of Completion</i></h1>
               <div class="card-text">
-                <p class="text-muted">This is to certify that </p>
-                <h5 id ="name"></h5>
-                <p class="text-muted">has completed the </p>
-                <h5>level <span  id ="level"></span> of the blockchain course</h5>
-                <p class="text-right mt-5""><img src="https://s3-ap-southeast-1.amazonaws.com/hashreader/hashcademy-logo.png" alt="" style="width: 180px;"></p>
-              </div>
+                <h4><i>This is to certify that ...</i><span id ="name"></span><i>... Student of <span id="course"></span> has completed</i>
+				<span  id ="level"></span><i> year in engineering from MLR Institute of Technology.</i></h4>
+				</div>
+        </div>
+		<p id="blockHash"></p>
             </div>
           </div>
         </div>
         <div class="col-md-4 order-md-1">
-          <h4 class="text-muted">Input the detail of certificate</h4>
+          <h4 class="text-primary">Input the detail of certificate</h4>
               <div class="mb-3">
-                <label for="username">Full Name</label>
-                <input type="text" class="form-control" id="fullname" placeholder="Full Name" required>
+                <label for="username">Enter your university Roll number</label>
+                <input type="text" class="form-control" id="fullname" placeholder="Roll number" required>
               </div>
               <div class="mb-3">
-                <label for="username">Level of Study</label>
-                <input type="text" class="form-control" id="levelOfStudy" placeholder="Level of Study" required>
+                <label for="username">Year of Study</label>
+                <input type="text" class="form-control" id="levelOfStudy" placeholder="Year of Study" required>
+              </div>
+              <div class="mb-3">
+                <label for="username">Course</label>
+                <input type="text" class="form-control" id="courses" placeholder="Stream" required>
               </div>
             <hr class="mb-4">
-            <button id="button" class="btn btn-primary btn-lg btn-block">Register
-            </button>
+            <button id="button" class="btn btn-dark">Generate
+			</button>
+		</button>
         </div>
       </div>
  
       <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2019 Hashcademy</p>
       </footer>
     </div>
  
@@ -72,26 +86,158 @@
         // Set the provider you want from Web3.providers
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
       }
-      var abi=[{"constant": false,"inputs": [{"name": "_name","type": "string"},{"name": "_level","type": "uint256"}],"name": "setCertificate","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "getCertificate","outputs": [{"name": "","type": "string"},{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}];
-      var contractAddress = "0xc81e378c4d0adae6f974e4b0f7f4902e57bc0ca4";
+      var abi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_level",
+				"type": "uint256"
+			},
+			{
+				"name": "_course",
+				"type": "string"
+			}
+		],
+		"name": "setCertificate",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "level",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "course",
+				"type": "string"
+			}
+		],
+		"name": "Certificate",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "course",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getCertificate",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "level",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+	  var contractAddress = "0xb1402a16b4828E66eb35B8Af555E48d128787d20";
       async function init(){
         await ethereum.enable()
-        Contract = await new web3.eth.Contract(abi, contractAddress);
-        var accounts = await web3.eth.getAccounts();
+		Contract = await new web3.eth.Contract(abi, contractAddress);
+		var accounts = await web3.eth.getAccounts();
         web3.eth.defaultAccount=accounts[0];
         Contract.methods.getCertificate().call().then(function(result){
           document.getElementById('name').textContent = result[0];
           document.getElementById('level').textContent =result[1];
+		  document.getElementById('course').textContent=result[2];
+		  //const data=Contract.methods.setCertificate(fullName,levelOfStudy,courses).send({from: web3.eth.defaultAccount,gas:300000}).then(res=>{document.getElementById('blockHash').innerText=res.blockHash});
         });
         
       }
       init();
-      async function register(){
-        var fullName = document.getElementById('fullname').value;
+      async function generate(){
+        var fullName = (document.getElementById('fullname').value);
         var levelOfStudy = document.getElementById('levelOfStudy').value;
-        Contract.methods.setCertificate(fullName, levelOfStudy).send({from: web3.eth.defaultAccount,gas:300000}).then(console.log);
-      }
-      document.getElementById('button').addEventListener('click', register);
+        var courses=document.getElementById('courses').value;
+		const data=Contract.methods.setCertificate(fullName,levelOfStudy,courses).send({from: web3.eth.defaultAccount,gas:300000}).then(res=>{document.getElementById('blockHash').innerText=res.blockHash});
+		console.log("hello",data);
+		//document.getElementById('blockHash').textContent = receipt.web3.eth.getTransaction() ;
+Contract.methods.setHolder(web3.eth.defaultAccount,fullName,levelOfStudy,courses).send({from : web3.eth.defaultAccount,gas:300000}).on('receipt',function(receipt){
+		  document.getElementById('error').style.display='none';
+		  document.getElementById('blockHash').textContent = receipt.web3.eth.getTransaction() ;
+		  document.getElementById('name').textContent=web3.utils.hexToAscii(receipt.events.HolderInfo.returnValues.name);
+      document.getElementById('level').textContent=receipt.events.HolderInfo.returnValues.level;
+      document.getElementById('courses').textContent=web3.utils.hexToAscii(receipt.events.HolderInfo.returnValues.courses);
+	  }).on('error',function(error){
+		  document.getElementById('error').style.display='block';
+		  document.getElementById('error').textContent=error;
+
+	  });
+	  }
+	 // const data=Contract.methods.setCertificate(fullName,levelOfStudy,courses).send({from: web3.eth.defaultAccount,gas:300000}).then(res=>{document.getElementById('blockHash').innerText=res.blockHash});
+      document.getElementById('button').addEventListener('click', generate);
     </script>
   </body>
 </html>

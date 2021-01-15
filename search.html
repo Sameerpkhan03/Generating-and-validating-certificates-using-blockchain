@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<head>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+</head>
+<body style="background: url(bc.jpeg); width: 100%;
+height: 800px;
+background-size: 100% 100%;">
+        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">BlockChain</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/index.html">Home</a>
+                    <a class="nav-item nav-link" href="/search.html">Verify</a>
+                  </div>
+                </div>
+              </nav>
+    <script>
+    function hex2a(hexx) {
+    var hex = hexx.toString();//force conversion
+    var str = '';
+    for (var i = 0; i < hex.length; i += 2)
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return str;
+}
+    function search(){
+        var res=document.getElementById("hashvalue").value;
+        getresult(res);
+    }
+    function getresult(res){
+        var searchtransaction=res;
+        var data = null;
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = false;
+xhr.addEventListener("readystatechange", function () {
+  document.getElementById("found").innerHTML=" ";
+  if (this.readyState === 4) {
+    var o=JSON.parse(this.responseText);
+    var k=(o.result);
+    var flg=0;
+    for (var i=0; i<k.length; i++){
+       if(k[i].blockHash==res || k[i].hash==res){
+        flg=1;
+        var g=(k[i].input).toString();
+        var str = hex2a(g);
+        str=str.substring(37,48);
+        var h=document.createTextNode(str);
+        input.appendChild(h);
+        var text = document.createTextNode("Yes Found");
+        found.appendChild(text);
+       };
+    }
+    if(flg==0){        
+    var text = document.createTextNode("Not found");
+    found.appendChild(text);}
+  }
+});
+
+
+xhr.open("GET", "https://api-ropsten.etherscan.io/api?module=account&action=txlist&address=0x264edf1c217717fd74ba13f3db3bac44d44527e1&startblock=0&endblock=99999999&sort=asc&apikey=S1E7ISVG6DS9EII3YZK4SCAW1FJ79HE1DR");
+xhr.send(data);
+ }    
+</script>
+<div class="container">
+  <div class="py-5 text-center">
+    <h2 style="color:black">Validate Your Certificate On Blockchain</h2>
+  </div>
+  <h3>Enter the Hash Value</h3>
+<div class="input-group input-group-lg">
+        <input type="text" class="form-control" aria-label="Search" id="hashvalue"placeholder="Enter the hash value of the certificate" aria-describedby="inputGroup-sizing-sm">
+      </div>
+     <br> <button  class="btn btn-primary btn-lg btn-block" onclick="search()" style ="width:fit-content; margin-left:500px ;">Search</button>
+</div>
+<div class="box">
+        <h2><div class="found" id="found"></div></h2>
+        <h2><div class="input" id="input"></div></h2>
+</div>
+</body>
+</html>
